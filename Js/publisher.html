@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body,html{
+            font-size: 50px;
+        }
+        * {
+            margin: 10px;
+            padding: 10px;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.1.0/paho-mqtt.js"></script>
+
+    <title>Mqtt Client</title>
+</head>
+
+<body>
+
+    <script>
+        function write(text){
+            document.getElementsByTagName('body')[0].innerText += text + "\n";
+        }
+    </script>
+
+    <script>
+        var client = new Paho.Client("mqtt.eclipse.org", 80, "clientId");
+
+        client.onConnectionLost = onConnectionLost;
+
+        client.connect({
+            onSuccess: onConnect
+        });
+
+
+        function onConnect() {
+            write("Connected");
+            write("Pusing Messsages");
+            client.publish("home_led_light", "on", 1);
+            client.publish("home_led_light", "off", 1);
+            client.publish("home_led_light", "on", 1);
+            write("Pusing Complete");
+            client.end();
+        }
+
+        function onConnectionLost(responseObject) {
+            if (responseObject.errorCode !== 0) {
+                write("Connection Closed");
+            }
+        }
+
+    </script>
+</body>
+
+</html>
